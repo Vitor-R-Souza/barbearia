@@ -21,7 +21,7 @@ import { ClientModelForm } from '../client.models';
 })
 export class EditClientComponent implements OnInit, OnDestroy {
   private httpSubscriptions: Subscription[] = [];
-  private activatedRouteSubscription?: Subscription;
+
   client: ClientModelForm = {
     id: 0,
     name: '',

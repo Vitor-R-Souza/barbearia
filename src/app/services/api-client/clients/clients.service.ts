@@ -41,8 +41,8 @@ export class ClientsService implements ICLientService {
     return this.http.delete<void>(`${this.basePath}client/${id}`);
   }
 
-  list(): Observable<ListClientResponse> {
-    return this.http.get<ListClientResponse>(`${this.basePath}client`);
+  list(): Observable<ListClientResponse[]> {
+    return this.http.get<ListClientResponse[]>(`${this.basePath}client`);
   }
 
   findById(id: number): Observable<DetailClientResponse> {

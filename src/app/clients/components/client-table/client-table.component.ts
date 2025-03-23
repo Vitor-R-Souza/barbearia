@@ -11,17 +11,31 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MatPaginator,
+  MatPaginatorIntl,
+  MatPaginatorModule,
+} from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ClientModelTable } from '../../client.models';
 import { Subscription } from 'rxjs';
 import { SERVICES_TOKEN } from '../../../services/service.token';
 import { IDialogManagerService } from '../../../services/idialog-manager.service';
 import { DialogManagerService } from '../../../services/dialog-manager.service';
+import { YesNoDialogComponent } from '../../../commons/components/yes-no-dialog/yes-no-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { customPaginator } from './custom-paginator';
 
 @Component({
   selector: 'app-client-table',
-  imports: [MatTableModule, MatPaginatorModule, MatIconModule],
+  imports: [
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+  ],
   templateUrl: './client-table.component.html',
   styleUrl: './client-table.component.scss',
   providers: [
@@ -29,6 +43,7 @@ import { DialogManagerService } from '../../../services/dialog-manager.service';
       provide: SERVICES_TOKEN.DIALOG,
       useClass: DialogManagerService,
     },
+    { provide: MatPaginatorIntl, useClass: customPaginator },
   ],
 })
 export class ClientTableComponent
@@ -46,10 +61,10 @@ export class ClientTableComponent
   private dialogManagerServiceSubscription?: Subscription;
 
   @Output()
-  confirmDelete = new EventEmitter<ClientModelTable>();
+  onConfirmDelete = new EventEmitter<ClientModelTable>();
 
   @Output()
-  requestUpdate = new EventEmitter<ClientModelTable>();
+  onRequestUpdate = new EventEmitter<ClientModelTable>();
 
   constructor(
     @Inject(SERVICES_TOKEN.DIALOG)
@@ -78,10 +93,25 @@ export class ClientTableComponent
     ${phone.substring(2, 7)} -
     ${phone.substring(7)}`;
   }
-  deleteClient(_t36: any) {
-    throw new Error('Method not implemented.');
+  deleteClient(client: ClientModelTable) {
+    this.dialogManagerService
+      .showYesNoDialog(YesNoDialogComponent, {
+        title: 'exclusão',
+        content: `confirmar exclusão do cliente: ${client.name}`,
+      })
+      .subscribe((result) => {
+        if (result) {
+          this.onConfirmDelete.emit(client);
+          const updatedList = this.dataSource.data.filter(
+            (c) => c.id !== client.id
+          );
+          this.dataSource = new MatTableDataSource<ClientModelTable>(
+            updatedList
+          );
+        }
+      });
   }
-  onRequestUpdate(_t36: any) {
-    throw new Error('Method not implemented.');
+  updateClient(client: ClientModelTable) {
+    this.onRequestUpdate.emit(client);
   }
 }

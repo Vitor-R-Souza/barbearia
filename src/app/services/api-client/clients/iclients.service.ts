@@ -15,6 +15,6 @@ export interface ICLientService {
     request: UpdateClientRequest
   ): Observable<UpdateClientResponse>;
   delete(id: number): Observable<void>;
-  list(): Observable<ListClientResponse>;
+  list(): Observable<ListClientResponse[]>;
   findById(id: number): Observable<DetailClientResponse>;
 }

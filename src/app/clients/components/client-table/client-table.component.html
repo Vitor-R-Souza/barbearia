@@ -1,34 +1,34 @@
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  <ng-container matColumDef="name">
-    <th mat-header-cell *mateHeaderCellDef>Nome</th>
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Nome</th>
     <td mat-cell *matCellDef="let client">{{ client.name }}</td>
   </ng-container>
-  <ng-container matColumDef="email">
-    <th mat-header-cell *mateHeaderCellDef>E-mail</th>
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef>E-mail</th>
     <td mat-cell *matCellDef="let client">{{ client.email }}</td>
   </ng-container>
-  <ng-container matColumDef="phone">
-    <th mat-header-cell *mateHeaderCellDef>Clular</th>
+  <ng-container matColumnDef="phone">
+    <th mat-header-cell *matHeaderCellDef>Clular</th>
     <td mat-cell *matCellDef="let client">{{ formatPhone(client.phone) }}</td>
   </ng-container>
-  <ng-container matColumDef="actions">
-    <th mat-header-cell *mateHeaderCellDef>Ações</th>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Ações</th>
     <td mat-cell *matCellDef="let client">
       <button
-        mat-mini-tab
+        mat-mini-fab
         extended
-        matTolltip="excluir"
+        matTooltip="excluir"
         class="delete-button"
         (click)="deleteClient(client)"
       >
         <mat-icon>delete</mat-icon>
       </button>
       <button
-        mat-mini-tab
+        mat-mini-fab
         extended
-        matTolltip="atualizar"
+        matTooltip="atualizar"
         class="update-button"
-        (click)="onRequestUpdate(client)"
+        (click)="updateClient(client)"
       >
         <mat-icon>edit</mat-icon>
       </button>

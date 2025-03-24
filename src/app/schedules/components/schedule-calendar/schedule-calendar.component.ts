@@ -62,8 +62,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   styleUrl: './schedule-calendar.component.scss',
 })
 export class ScheduleCalendarComponent
-  implements AfterViewInit, OnChanges, OnDestroy
-{
+  implements AfterViewInit, OnChanges, OnDestroy {
   private subscription?: Subscription;
 
   private _selected: Date = new Date();
@@ -95,7 +94,7 @@ export class ScheduleCalendarComponent
   constructor(
     @Inject(SERVICES_TOKEN.DIALOG)
     private readonly dialogManagerService: IDialogManagerService
-  ) {}
+  ) { }
 
   get selected(): Date {
     return this._selected;

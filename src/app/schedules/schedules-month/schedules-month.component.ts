@@ -43,7 +43,7 @@ export class SchedulesMonthComponent implements OnInit, OnDestroy {
     private readonly clientHttpService: ICLientService,
     @Inject(SERVICES_TOKEN.SNACKBAR)
     private readonly snackBarManager: ISnackbarManagerService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.fecthSchedules(new Date());
@@ -65,7 +65,7 @@ export class SchedulesMonthComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.httpService.delete(schedule.id).subscribe());
   }
 
-  onSchedueClient(schedule: SaveScheduleModel) {
+  onScheduleClient(schedule: SaveScheduleModel) {
     if (schedule.startAt && schedule.endAt && schedule.clientId) {
       const request: SavedScheduleRequest = {
         startAt: schedule.startAt,

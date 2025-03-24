@@ -64,11 +64,11 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 export class ScheduleCalendarComponent
   implements AfterViewInit, OnChanges, OnDestroy
 {
-  displayedColumns: string[] = ['startAt', 'endAt', 'client', 'actions'];
+  private subscription?: Subscription;
 
   private _selected: Date = new Date();
 
-  private subscription?: Subscription;
+  displayedColumns: string[] = ['startAt', 'endAt', 'client', 'actions'];
 
   dataSource!: MatTableDataSource<ClientScheduleAppointmentModel>;
 
@@ -80,25 +80,17 @@ export class ScheduleCalendarComponent
     clientId: undefined,
   };
 
-  clientSelectFormControll = new FormControl();
+  clientSelectFormControl = new FormControl();
 
-  @Input()
-  monthSchedule!: ScheduleAppointmentMonthModel;
+  @Input() monthSchedule!: ScheduleAppointmentMonthModel;
+  @Input() clients: SelectClientModel[] = [];
 
-  @Input()
-  clients: SelectClientModel[] = [];
+  @Output() onDateChange = new EventEmitter<Date>();
+  @Output() onConfirmDelete =
+    new EventEmitter<ClientScheduleAppointmentModel>();
+  @Output() onScheduleClient = new EventEmitter<SaveScheduleModel>();
 
-  @Output()
-  onDateChange = new EventEmitter<Date>();
-
-  @Output()
-  onConfirmDelete = new EventEmitter<ClientScheduleAppointmentModel>();
-
-  @Output()
-  onScheduleClient = new EventEmitter<SaveScheduleModel>();
-
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     @Inject(SERVICES_TOKEN.DIALOG)
@@ -117,7 +109,7 @@ export class ScheduleCalendarComponent
     }
   }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
@@ -128,7 +120,6 @@ export class ScheduleCalendarComponent
       this.dataSource.paginator = this.paginator;
     }
   }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['monthSchedule'] && this.monthSchedule) {
       this.buildTable();
@@ -169,17 +160,19 @@ export class ScheduleCalendarComponent
   requestDelete(schedule: ClientScheduleAppointmentModel) {
     this.subscription = this.dialogManagerService
       .showYesNoDialog(YesNoDialogComponent, {
-        title: 'exclusão do agendamento',
-        content: 'confirma a exclusão?',
+        title: 'Exclusão de agendamento',
+        content: 'Confirma a exclusão do agendamento?',
       })
       .subscribe((result) => {
         if (result) {
           this.onConfirmDelete.emit(schedule);
-          const updatedList = this.dataSource.data.filter(
+          const updatedeList = this.dataSource.data.filter(
             (c) => c.id !== schedule.id
           );
           this.dataSource =
-            new MatTableDataSource<ClientScheduleAppointmentModel>(updatedList);
+            new MatTableDataSource<ClientScheduleAppointmentModel>(
+              updatedeList
+            );
           if (this.paginator) {
             this.dataSource.paginator = this.paginator;
           }
@@ -195,11 +188,10 @@ export class ScheduleCalendarComponent
 
   private buildTable() {
     const appointments = this.monthSchedule.scheduledAppointments.filter(
-      (a) => {
+      (a) =>
         this.monthSchedule.year === this._selected.getFullYear() &&
-          this.monthSchedule.month - 1 === this._selected.getMonth() &&
-          a.day === this._selected.getDate();
-      }
+        this.monthSchedule.month - 1 === this._selected.getMonth() &&
+        a.day === this._selected.getDate()
     );
     this.dataSource = new MatTableDataSource<ClientScheduleAppointmentModel>(
       appointments

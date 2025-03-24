@@ -1,59 +1,20 @@
-# Barbearia
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.3.
+# Projeto Barbearia Decol tech 2025
 
-## Development server
+Projeto de uma barbearia usando angular, com tela de cadastro, listagem e atualização de cliente junto de uma tela para fazer e excluir agendamentos. \
+O projeto consome uma API tambem criada no bootcamp decola tech que faz as requisições no banco de dados para salvar os dados
 
-To start a local development server, run:
+## Instalação
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Para instalar o projeto, primeiro tenha certeza que possui o Node.js e o angular CLI instalado em sua máquina. Então clone o repositorio em sua máquina local e então rode no diretorio do projeto o seguinte comando NPM:
 
 ```bash
-ng generate component component-name
+  npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+Após a Instalaçãode todas as dependencias o projeto já estará pronto para usar o comando `ng serve` que irá rodar o projeto em um servidor local
 ```bash
-ng generate --help
+  ng serve
 ```
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+após a inicialização, acesse o projeto pelo endereço `http://localhost:4200/`

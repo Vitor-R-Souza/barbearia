@@ -2,7 +2,8 @@
 # Projeto Barbearia Decol tech 2025
 
 Projeto de uma barbearia usando angular, com tela de cadastro, listagem e atualização de cliente junto de uma tela para fazer e excluir agendamentos. \
-O projeto consome uma API tambem criada no bootcamp decola tech que faz as requisições no banco de dados para salvar os dados
+O projeto consome uma API tambem criada no bootcamp decola tech que faz as requisições no banco de dados para salvar os dados \
+[Link para a API](https://github.com/Vitor-R-Souza/barbearia-api)
 
 ## Instalação
 

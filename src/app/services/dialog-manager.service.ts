@@ -9,16 +9,13 @@ import { MatDialog } from '@angular/material/dialog';
   providedIn: 'root',
 })
 export class DialogManagerService implements IDialogManagerService {
-  constructor(private readonly dialog: MatDialog) {}
+  constructor(private readonly dialog: MatDialog) { }
 
   showYesNoDialog(
     component: ComponentType<YesNoDialogComponent>,
     data: { title: string; content: string }
   ): Observable<any> {
-    const dialogRef = this.dialog.open(component, {
-      width: '400',
-      data,
-    });
-    return dialogRef.afterClosed();
+    const dialogRef = this.dialog.open(component, { width: '400', data, })
+    return dialogRef.afterClosed()
   }
 }

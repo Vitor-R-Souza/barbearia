@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ScheduleCalendarComponent } from '../components/schedule-calendar/schedule-calendar.component';
 import { SERVICES_TOKEN } from '../../services/service.token';
-import { ISchdeuleService } from '../../services/api-client/schedules/ISchedule.service';
+import { ISchdeuleService } from '../../services/api-client/schedules/ischedule.service';
 import { ICLientService } from '../../services/api-client/clients/iclients.service';
 import { ISnackbarManagerService } from '../../services/isnackbar-manager.service';
 import { ClientsService } from '../../services/api-client/clients/clients.service';

@@ -16,25 +16,16 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root',
 })
 export class ClientsService implements ICLientService {
-  private readonly basePath = environment.apiUrl;
+  private readonly basePath = environment.apiUrl
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   save(request: SaveClientRequest): Observable<SaveClientResponse> {
-    return this.http.post<SaveClientResponse>(
-      `${this.basePath}client`,
-      request
-    );
+    return this.http.post<SaveClientResponse>(`${this.basePath}client`, request)
   }
 
-  update(
-    id: number,
-    request: UpdateClientRequest
-  ): Observable<UpdateClientResponse> {
-    return this.http.put<UpdateClientResponse>(
-      `${this.basePath}client/${id}`,
-      request
-    );
+  update(id: number, request: UpdateClientRequest): Observable<UpdateClientResponse> {
+    return this.http.put<UpdateClientResponse>(`${this.basePath}client/${id}`, request)
   }
 
   delete(id: number): Observable<void> {

@@ -6,17 +6,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class SnackbarManagerService implements ISnackbarManagerService {
-  constructor(private readonly snackBar: MatSnackBar) {}
+  constructor(private readonly snackBar: MatSnackBar) { }
 
   show(
     message: string,
     action: string = 'fechar',
     duration: number = 3000
   ): void {
-    this.snackBar.open(message, action, {
-      duration,
-      verticalPosition: 'top',
-      horizontalPosition: 'right',
-    });
+    this.snackBar.open(message, action, { duration, verticalPosition: 'top', horizontalPosition: 'right', })
   }
 }

@@ -16,36 +16,34 @@ import { MenuBarComponent } from './commons/components/menu-bar/menu-bar.compone
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'barbearia';
+  title = 'barbearia'
 
-  private routeSubscription?: Subscription;
+  private routeSubscription?: Subscription
 
   constructor(
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.routeSubscription = this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        map(() => this.getRouteTitle(this.activatedRoute))
-      )
-      .subscribe((title) => (this.title = title));
+    this.routeSubscription = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(() => this.getRouteTitle(this.activatedRoute))
+    ).subscribe(title => this.title = title)
   }
 
   ngOnDestroy(): void {
     if (this.routeSubscription) {
-      this.routeSubscription.unsubscribe();
+      this.routeSubscription.unsubscribe()
     }
   }
 
   private getRouteTitle(route: ActivatedRoute): string {
-    let child = route;
+    let child = route
     while (child.firstChild) {
-      child = child.firstChild;
+      child = child.firstChild
     }
 
-    return child.snapshot.data['title'] || 'Default title';
+    return child.snapshot.data['title'] || 'Default title'
   }
 }

@@ -28,41 +28,38 @@ import { SavedScheduleRequest } from '../../services/api-client/schedules/schedu
   ],
 })
 export class SchedulesMonthComponent implements OnInit, OnDestroy {
-  monthSchedule!: ScheduleAppointmentMonthModel;
+  monthSchedule!: ScheduleAppointmentMonthModel
 
-  clients: SelectClientModel[] = [];
+  clients: SelectClientModel[] = []
 
-  private subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[] = []
 
-  private selectedDate?: Date;
+  private selectedDate?: Date
 
   constructor(
-    @Inject(SERVICES_TOKEN.HTTP.SCHEDULE)
-    private readonly httpService: ISchdeuleService,
-    @Inject(SERVICES_TOKEN.HTTP.CLIENT)
-    private readonly clientHttpService: ICLientService,
-    @Inject(SERVICES_TOKEN.SNACKBAR)
-    private readonly snackBarManager: ISnackbarManagerService
+    @Inject(SERVICES_TOKEN.HTTP.SCHEDULE) private readonly httpService: ISchdeuleService,
+    @Inject(SERVICES_TOKEN.HTTP.CLIENT) private readonly clientHttpService: ICLientService,
+    @Inject(SERVICES_TOKEN.SNACKBAR) private readonly snackBarManager: ISnackbarManagerService
   ) { }
 
   ngOnInit(): void {
-    this.fecthSchedules(new Date());
+    this.fecthSchedules(new Date())
     this.subscriptions.push(
-      this.clientHttpService.list().subscribe((data) => (this.clients = data))
-    );
+      this.clientHttpService.list().subscribe(data => this.clients = data)
+    )
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((s) => s.unsubscribe());
+    this.subscriptions.forEach(s => s.unsubscribe())
   }
 
   onDateChange(date: Date) {
-    this.selectedDate = date;
-    this.fecthSchedules(date);
+    this.selectedDate = date
+    this.fecthSchedules(date)
   }
 
   onConfirmDelete(schedule: ClientScheduleAppointmentModel) {
-    this.subscriptions.push(this.httpService.delete(schedule.id).subscribe());
+    this.subscriptions.push(this.httpService.delete(schedule.id).subscribe())
   }
 
   onScheduleClient(schedule: SaveScheduleModel) {
@@ -71,15 +68,15 @@ export class SchedulesMonthComponent implements OnInit, OnDestroy {
         startAt: schedule.startAt,
         endAt: schedule.endAt,
         clientId: schedule.clientId,
-      };
+      }
       this.subscriptions.push(
         this.httpService.save(request).subscribe(() => {
           this.snackBarManager.show('agendamento concluido');
           if (this.selectedDate) {
-            this.fecthSchedules(this.selectedDate);
+            this.fecthSchedules(this.selectedDate)
           }
         })
-      );
+      )
     }
   }
 
@@ -89,7 +86,7 @@ export class SchedulesMonthComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.httpService
         .listInMonth(year, month)
-        .subscribe((data) => (this.monthSchedule = data))
-    );
+        .subscribe(data => this.monthSchedule = data)
+    )
   }
 }

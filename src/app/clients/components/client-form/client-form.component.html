@@ -16,6 +16,7 @@
         }
       </mat-form-field>
     </div>
+
     <div class="row">
       <div class="col-6">
         <mat-form-field class="fil-col">
@@ -33,6 +34,7 @@
           }
         </mat-form-field>
       </div>
+
       <div class="col-6">
         <mat-form-field class="fil-col">
           <mat-label>Celular</mat-label>
@@ -46,11 +48,12 @@
             mask="(00) 00000-0000"
           />
           @if (nameModel.hasError('required') || nameModel.hasError('mask')) {
-          <mat-error>Informe o nome do cliente</mat-error>
+          <mat-error>Informe um numero de celular válido do cliente</mat-error>
           }
         </mat-form-field>
       </div>
     </div>
+
     <div class="row">
       <div class="col div-button">
         <button type="submit" mat-flat-button [disabled]="form.invalid">

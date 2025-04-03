@@ -25,12 +25,12 @@ export class ClientFormComponent {
     name: '',
     email: '',
     phone: '',
-  };
+  }
 
   @Output()
-  clientSubmited = new EventEmitter<ClientModelForm>();
+  clientSubmited = new EventEmitter<ClientModelForm>()
 
   onSubmit(_: NgForm) {
-    this.clientSubmited.emit(this.client);
+    this.clientSubmited.emit(this.client)
   }
 }

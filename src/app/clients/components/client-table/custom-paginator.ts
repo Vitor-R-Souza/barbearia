@@ -9,5 +9,5 @@ export class customPaginator extends MatPaginatorIntl {
   override nextPageLabel: string = 'Próxima página';
   override previousPageLabel: string = 'Página anterior';
   override firstPageLabel: string = 'Primeira página';
-  override lastPageLabel: string = 'Ultima página';
+  override lastPageLabel: string = 'Última página';
 }

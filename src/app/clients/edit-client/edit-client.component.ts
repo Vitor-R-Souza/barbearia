@@ -20,53 +20,49 @@ import { ClientModelForm } from '../client.models';
   ],
 })
 export class EditClientComponent implements OnInit, OnDestroy {
-  private httpSubscriptions: Subscription[] = [];
+  private httpSubscriptions: Subscription[] = []
 
   client: ClientModelForm = {
     id: 0,
     name: '',
     email: '',
     phone: '',
-  };
+  }
 
   constructor(
-    @Inject(SERVICES_TOKEN.HTTP.CLIENT)
-    private readonly httpService: ICLientService,
-    @Inject(SERVICES_TOKEN.SNACKBAR)
-    private readonly snackBarManager: ISnackbarManagerService,
+    @Inject(SERVICES_TOKEN.HTTP.CLIENT) private readonly httpService: ICLientService,
+    @Inject(SERVICES_TOKEN.SNACKBAR) private readonly snackBarManager: ISnackbarManagerService,
     private readonly activeRoute: ActivatedRoute,
     private readonly router: Router
-  ) {}
+  ) { }
+
   ngOnInit(): void {
-    const id = this.activeRoute.snapshot.paramMap.get('id');
+    const id = this.activeRoute.snapshot.paramMap.get('id')
     if (!id) {
-      this.snackBarManager.show('erro ao recuperar informações do cliente');
-      this.router.navigate(['client/list']);
-      return;
+      this.snackBarManager.show('erro ao recuperar informações do cliente')
+      this.router.navigate(['client/list'])
+      return
     }
-    this.httpSubscriptions?.push(
-      this.httpService
-        .findById(Number(id))
-        .subscribe((data) => (this.client = data))
-    );
+    this.httpSubscriptions?.push(this.httpService.findById(Number(id)).subscribe(data => this.client = data))
   }
+
   ngOnDestroy(): void {
-    this.httpSubscriptions.forEach((s) => s.unsubscribe);
+    this.httpSubscriptions.forEach(s => s.unsubscribe)
   }
 
   onSubmitClient(value: ClientModelForm) {
-    const { id, ...request } = value;
+    const { id, ...request } = value
     if (id) {
       this.httpSubscriptions?.push(
-        this.httpService.update(id, request).subscribe((_) => {
+        this.httpService.update(id, request).subscribe(_ => {
           this.snackBarManager.show('usuário atualizado com sucesso');
-          this.router.navigate(['client/list']);
+          this.router.navigate(['client/list'])
         })
-      );
-      return;
+      )
+      return
     } else {
-      this.snackBarManager.show('Um erro inesperado ocorreu');
-      this.router.navigate(['client/list']);
+      this.snackBarManager.show('Um erro inesperado ocorreu')
+      this.router.navigate(['client/list'])
     }
   }
 }

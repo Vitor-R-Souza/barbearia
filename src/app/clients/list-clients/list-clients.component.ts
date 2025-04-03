@@ -20,39 +20,34 @@ import { Router } from '@angular/router';
   ],
 })
 export class ListClientsComponent implements OnInit, OnDestroy {
-  clients: ClientModelTable[] = [];
+  clients: ClientModelTable[] = []
 
-  private httpSubscriptions: Subscription[] = [];
+  private httpSubscriptions: Subscription[] = []
 
   constructor(
-    @Inject(SERVICES_TOKEN.HTTP.CLIENT)
-    private readonly httpService: ICLientService,
-    @Inject(SERVICES_TOKEN.SNACKBAR)
-    private readonly snackBarManager: ISnackbarManagerService,
+    @Inject(SERVICES_TOKEN.HTTP.CLIENT) private readonly httpService: ICLientService,
+    @Inject(SERVICES_TOKEN.SNACKBAR) private readonly snackBarManager: ISnackbarManagerService,
     private readonly router: Router
-  ) {}
-
-  delete(client: ClientModelTable) {
-    this.httpSubscriptions.push(
-      this.httpService
-        .delete(client.id)
-        .subscribe((_) =>
-          this.snackBarManager.show(`O cliente ${client.name} foi deletado`)
-        )
-    );
-  }
-
-  update(client: ClientModelTable) {
-    this.router.navigate(['client/edit-client/', client.id]);
-  }
+  ) { }
 
   ngOnInit(): void {
     this.httpSubscriptions.push(
-      this.httpService.list().subscribe((data) => (this.clients = data))
-    );
+      this.httpService.list().subscribe(data => this.clients = data)
+    )
   }
 
   ngOnDestroy(): void {
-    this.httpSubscriptions.forEach((s) => s.unsubscribe);
+    this.httpSubscriptions.forEach(s => s.unsubscribe)
+  }
+
+  update(client: ClientModelTable) {
+    this.router.navigate(['client/edit-client/', client.id])
+  }
+
+  delete(client: ClientModelTable) {
+    this.httpSubscriptions.push(
+      this.httpService.delete(client.id)
+        .subscribe(_ => this.snackBarManager.show(`O cliente ${client.name} foi deletado`))
+    )
   }
 }

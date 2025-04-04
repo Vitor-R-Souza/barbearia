@@ -182,7 +182,7 @@ export class ScheduleCalendarComponent
 
   onTimeChange(time: Date) {
     const endAt = new Date(time)
-    endAt.setHours(time.getHours() + 1)
+    endAt.setHours(time?.getHours() + 1)
     this.newSchedule.endAt = endAt
   }
 

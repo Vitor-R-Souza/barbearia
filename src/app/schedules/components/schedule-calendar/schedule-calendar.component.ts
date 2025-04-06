@@ -55,58 +55,74 @@ import { provideNativeDateAdapter } from '@angular/material/core';
     MatInputModule,
   ],
   providers: [
+    // adaptador nativo de data
     provideNativeDateAdapter(),
+    // deinição do provedor de dependencia usando o SERVICES_TOKEN
     { provide: SERVICES_TOKEN.DIALOG, useClass: DialogManagerService },
   ],
   templateUrl: './schedule-calendar.component.html',
   styleUrl: './schedule-calendar.component.scss',
 })
+
+/* componente que exibe um calendario de agendamentos,
+permitindo criar e excluir agendamentos com angular material para interface
+e serviços de dialogos para confirmação de exclusão */
 export class ScheduleCalendarComponent
   implements AfterViewInit, OnChanges, OnDestroy {
+  // Armazena a inscrição em Observable do diálogo de confirmação.
   private subscription?: Subscription
 
+  // data selecionada no calendario
   private _selected: Date = new Date()
 
+  // definiççao das colunas na tabela de agendamentos
   displayedColumns: string[] = ['startAt', 'endAt', 'client', 'actions']
 
+  // dados da tabela de agendamentos
   dataSource!: MatTableDataSource<ClientScheduleAppointmentModel>
 
+  // se o formulario de agendamento está ativo
   addingSchedule: boolean = false
 
+  // dados do novo agendamento
   newSchedule: SaveScheduleModel = {
     startAt: undefined,
     endAt: undefined,
     clientId: undefined,
   }
 
+  // controle do formulario de seleção do cliente
   clientSelectFormControl = new FormControl()
 
-  @Input()
+  @Input() // entrada dos dados de agendamento do mês
   monthSchedule!: ScheduleAppointmentMonthModel
 
-  @Input()
+  @Input() // entrada da lista de clientes
   clients: SelectClientModel[] = []
 
-  @Output()
+  @Output() // emite a data quando muda
   onDateChange = new EventEmitter<Date>()
 
-  @Output()
+  @Output() // emite a confirmação do agendamento
   onConfirmDelete = new EventEmitter<ClientScheduleAppointmentModel>()
 
-  @Output()
+  @Output() // emite o agendamento a ser salvo
   onScheduleClient = new EventEmitter<SaveScheduleModel>()
 
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator) // referência do paginator
   paginator!: MatPaginator
 
+  // injeção dos servições usando os tokens de injeção de dependencias
   constructor(
     @Inject(SERVICES_TOKEN.DIALOG) private readonly dialogManagerService: IDialogManagerService
   ) { }
 
+  // retorna a data selecionada
   get selected(): Date {
     return this._selected
   }
 
+  // define a nova data, emite o evento "onTimeChange" e atualiza a tabela
   set selected(selected: Date) {
     if (this._selected.getTime() !== selected.getTime()) {
       this.onDateChange.emit(selected)
@@ -115,24 +131,32 @@ export class ScheduleCalendarComponent
     }
   }
 
+  /* quando o componente é destruído,
+  cancela todas as incrições para evitar vazamento de memoria */
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
   }
 
+  /* após a inicialização da visualização do componente,
+  define o paginador da tabela */
   ngAfterViewInit(): void {
     if (this.dataSource && this.paginator) {
       this.dataSource.paginator = this.paginator
     }
   }
 
+  // quando as ntradas do componente mudam, atualiza a tabela quando o monthSchedule muda
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['monthSchedule'] && this.monthSchedule) {
       this.buildTable()
     }
   }
 
+  /* quando o formulario para o agendamento for enviado,
+  cria um objeto ClientScheduleAppointmentModel com os dados, adiciona á lista dos agendamentos,
+  emite o evento onScheduleClient, atualiza a tabela e limpa o formulário */
   onSubmit(form: NgForm) {
     const startAt = new Date(this._selected)
     const endAt = new Date(this._selected)
@@ -163,6 +187,8 @@ export class ScheduleCalendarComponent
     }
   }
 
+  /* qundo a solicitação de exclusão for enviada, exibe um dialogo de confirmação com dialogManagerService.
+  Se confirmado, emite o evento onConfirmDelete e atualiza a tabela */
   requestDelete(schedule: ClientScheduleAppointmentModel) {
     this.subscription = this.dialogManagerService
       .showYesNoDialog(YesNoDialogComponent, {
@@ -180,12 +206,14 @@ export class ScheduleCalendarComponent
       })
   }
 
+  /* quando for escolhido o tempo de inicio, define o tempo de termino uma (1) hora depois */
   onTimeChange(time: Date) {
     const endAt = new Date(time)
     endAt.setHours(time?.getHours() + 1)
     this.newSchedule.endAt = endAt
   }
 
+  // filtra os agendamentos pelo dia criando um novo matTableDataSource com esses dados, atualizando o paginator
   private buildTable() {
     const appointments = this.monthSchedule.scheduledAppointments.filter(a =>
       this.monthSchedule.year === this._selected.getFullYear() &&

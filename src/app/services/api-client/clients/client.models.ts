@@ -1,4 +1,4 @@
-/* conjunto de interfaces que definem os modelos de dados para requisiçõe e respostas dos serviços de clientes */
+/* conjunto de interfaces que definem os modelos de dados para requisições e respostas dos serviços de clientes */
 
 export interface SaveClientRequest {
   name: string

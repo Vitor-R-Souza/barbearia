@@ -7,7 +7,7 @@ import { ISnackbarManagerService } from '../../services/isnackbar-manager.servic
 import { ClientsService } from '../../services/api-client/clients/clients.service';
 import { SchedulesService } from '../../services/api-client/schedules/schedules.service';
 import { SnackbarManagerService } from '../../services/snackbar-manager.service';
-import { share, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import {
   ClientScheduleAppointmentModel,
   SaveScheduleModel,

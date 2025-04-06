@@ -18,8 +18,12 @@ import { ClientModelForm } from '../../client.models';
   templateUrl: './client-form.component.html',
   styleUrl: './client-form.component.scss',
 })
+
+/* Este componente Angular exibe um formulário para criar ou editar informações de um cliente.
+Ele utiliza componentes do Angular Material para a interface do usuário e o módulo FormsModule
+para gerenciamento de formulários. Ele também utiliza a biblioteca ngx-mask para aplicar máscaras a campos de entrada. */
 export class ClientFormComponent {
-  @Input()
+  @Input() // entrada de um cliente no formato ClientModelForm
   client: ClientModelForm = {
     id: 0,
     name: '',
@@ -27,9 +31,10 @@ export class ClientFormComponent {
     phone: '',
   }
 
-  @Output()
+  @Output() // emitido quando o formulario é enviado
   clientSubmited = new EventEmitter<ClientModelForm>()
 
+  // metodo para enviar o formulario usando o evento de emit com os dados do formulario
   onSubmit(_: NgForm) {
     this.clientSubmited.emit(this.client)
   }

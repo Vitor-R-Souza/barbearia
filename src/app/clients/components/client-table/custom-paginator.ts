@@ -4,6 +4,8 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 @Injectable({
   providedIn: 'root',
 })
+
+// classe que customiza o paginator
 export class customPaginator extends MatPaginatorIntl {
   override itemsPerPageLabel: string = 'Itens por página';
   override nextPageLabel: string = 'Próxima página';

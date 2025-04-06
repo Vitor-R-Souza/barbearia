@@ -15,13 +15,18 @@ import { ClientModelForm } from '../client.models';
   templateUrl: './edit-client.component.html',
   styleUrl: './edit-client.component.scss',
   providers: [
+    // deinição dos provedores de dependencias usando o SERVICES_TOKEN
     { provide: SERVICES_TOKEN.HTTP.CLIENT, useClass: ClientsService },
     { provide: SERVICES_TOKEN.SNACKBAR, useClass: SnackbarManagerService },
   ],
 })
+
+// componente com formulario para editar o cliente após buscar os dados do mesmo pelo ID
 export class EditClientComponent implements OnInit, OnDestroy {
+  // incrições das chamadas HTTP
   private httpSubscriptions: Subscription[] = []
 
+  // dados do cliente a ser editado
   client: ClientModelForm = {
     id: 0,
     name: '',
@@ -29,6 +34,7 @@ export class EditClientComponent implements OnInit, OnDestroy {
     phone: '',
   }
 
+  // injeção dos servições usando os tokens de injeção de dependencias
   constructor(
     @Inject(SERVICES_TOKEN.HTTP.CLIENT) private readonly httpService: ICLientService,
     @Inject(SERVICES_TOKEN.SNACKBAR) private readonly snackBarManager: ISnackbarManagerService,
@@ -36,6 +42,9 @@ export class EditClientComponent implements OnInit, OnDestroy {
     private readonly router: Router
   ) { }
 
+  /* quando o componente é iniciado, busca os dados do cliente com o ID na rota de navegação (this.activeRoute.snapshot.paramMap.get('id')).
+  Caso não encontre o cliente exibe um snackBar de erro e volta para a lista de clientes.
+  Quando encontra o cliente usando o findById, armazena os dados do this.client*/
   ngOnInit(): void {
     const id = this.activeRoute.snapshot.paramMap.get('id')
     if (!id) {
@@ -46,10 +55,13 @@ export class EditClientComponent implements OnInit, OnDestroy {
     this.httpSubscriptions?.push(this.httpService.findById(Number(id)).subscribe(data => this.client = data))
   }
 
+  // quando o componente for destruído cancela todas as incrições
   ngOnDestroy(): void {
     this.httpSubscriptions.forEach(s => s.unsubscribe)
   }
 
+  /* quando o formulario for enviado, extrai o ID e dados do cliente, atualiza os dados com update caso o ID exista.
+  Após isso exibe um snackBar de sucesso e volta para lista, em caso de erro exibe um snackBar de erro e volta para a lista */
   onSubmitClient(value: ClientModelForm) {
     const { id, ...request } = value
     if (id) {

@@ -9,40 +9,23 @@
     <div class="col-6">
       <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="container h-100">
         <div
-          class="d-flex flex-column align-items-start justify-content-center h-100"
+          class="d-flex flex-column align-items-start justify-content-between py-5 h-100"
         >
-          <div class="row w-100 gx-0">
-            <div class="col-10">
-              <mat-form-field class="w-75">
-                <mat-label>Selecione o client</mat-label>
-                <mat-select
-                  name="clientId"
-                  id="clientId"
-                  #clientIdModel="ngModel"
-                  [(ngModel)]="newSchedule.clientId"
-                  required
-                >
-                  <mat-option
-                    *ngFor="let client of clients"
-                    [value]="client.id"
-                  >
-                    {{ client.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <div class="col-2">
-              <button
-                type="submit"
-                mat-mini-fab
-                extended
-                matTooltip="incluir agendamento no dia"
-                [disabled]="form.invalid"
+          <div class="col-12">
+            <mat-form-field class="w-100">
+              <mat-label>Selecione o client</mat-label>
+              <mat-select
+                name="clientId"
+                id="clientId"
+                #clientIdModel="ngModel"
+                [(ngModel)]="newSchedule.clientId"
+                required
               >
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
+                <mat-option *ngFor="let client of clients" [value]="client.id">
+                  {{ client.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
 
           <div class="col-12">
@@ -80,6 +63,19 @@
               <mat-timepicker #endAtPicker />
               <mat-timepicker-toggle [for]="endAtPicker" matSuffix />
             </mat-form-field>
+          </div>
+
+          <div class="col-12 div-button">
+            <button
+              class="w-100"
+              type="submit"
+              mat-mini-fab
+              extended
+              matTooltip="incluir agendamento no dia"
+              [disabled]="form.invalid"
+            >
+              Agendar
+            </button>
           </div>
         </div>
       </form>

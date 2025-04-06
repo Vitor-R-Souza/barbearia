@@ -1,3 +1,5 @@
+/* conjunto de interfaces que definem os modelos de dados para requisiçõe e respostas dos serviços de schedules */
+
 export interface scheduleAppointmentMonthResponse {
   year: number
   month: number

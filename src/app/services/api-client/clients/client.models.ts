@@ -1,3 +1,5 @@
+/* conjunto de interfaces que definem os modelos de dados para requisiçõe e respostas dos serviços de clientes */
+
 export interface SaveClientRequest {
   name: string
   email: string

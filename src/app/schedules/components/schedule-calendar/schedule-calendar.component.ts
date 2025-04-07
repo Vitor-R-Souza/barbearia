@@ -207,11 +207,11 @@ export class ScheduleCalendarComponent
   }
 
   /* quando for escolhido o tempo de inicio, define o tempo de termino uma (1) hora depois */
-  onTimeChange(time: Date) {
-    const endAt = new Date(time)
-    endAt.setHours(time?.getHours() + 1)
-    this.newSchedule.endAt = endAt
-  }
+  // onTimeChange(time: Date) {
+  //   const endAt = new Date(time)
+  //   endAt.setHours(time?.getHours() + 1)
+  //   this.newSchedule.endAt = endAt
+  // }
 
   // filtra os agendamentos pelo dia criando um novo matTableDataSource com esses dados, atualizando o paginator
   private buildTable() {

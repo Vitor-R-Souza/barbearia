@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 gy-5">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="day">
+          <th mat-header-cell *matHeaderCellDef>Dia</th>
+          <td mat-cell *matCellDef="let schedule">{{ schedule.day }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="client">
+          <th mat-header-cell *matHeaderCellDef>Cliente</th>
+          <td mat-cell *matCellDef="let schedule">{{ schedule.clientName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="startAt">
+          <th mat-header-cell *matHeaderCellDef>Início</th>
+          <td mat-cell *matCellDef="let schedule">
+            {{ schedule.startAt | date : "HH:mm a" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="endAt">
+          <th mat-header-cell *matHeaderCellDef>Término</th>
+          <td mat-cell *matCellDef="let schedule">
+            {{ schedule.endAt | date : "HH:mm a" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let schedule">
+            <button
+              mat-mini-fab
+              extended
+              matTooltip="excluir"
+              (click)="deleteSchedule(schedule)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator
+        [pageSizeOptions]="[10, 25, 50]"
+        showFirstLastButton
+      ></mat-paginator>
+    </div>
+  </div>
+</div>

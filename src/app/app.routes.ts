@@ -29,7 +29,7 @@ export const routes: Routes = [
   {
     path: 'schedule/list',
     component: SchedulesListComponent,
-    data: { title: 'Agendamentos' },
+    data: { title: 'Agendamentos do mês' },
   },
   { path: '**', redirectTo: 'schedule/month' },
 ];

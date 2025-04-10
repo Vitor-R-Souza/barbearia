@@ -75,7 +75,11 @@ export class SchedulesMonthComponent implements OnInit, OnDestroy {
 
   /* quando a exclusão for confirmada, deletar o agendamento e armazena a inscrição */
   onConfirmDelete(schedule: ClientScheduleAppointmentModel) {
-    this.subscriptions.push(this.httpService.delete(schedule.id).subscribe())
+    this.subscriptions.push(
+      this.httpService.delete(schedule.id).subscribe(_ => {
+        this.snackBarManager.show('Agendamento excluido')
+      })
+    )
   }
 
   /* quando confirma o agendamento de um cliente,

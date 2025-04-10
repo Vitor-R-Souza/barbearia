@@ -103,7 +103,7 @@ export class ScheduleCalendarComponent
   @Output() // emite a data quando muda
   onDateChange = new EventEmitter<Date>()
 
-  @Output() // emite a confirmação do agendamento
+  @Output() // emite a confirmação da exclusão
   onConfirmDelete = new EventEmitter<ClientScheduleAppointmentModel>()
 
   @Output() // emite o agendamento a ser salvo
@@ -147,7 +147,7 @@ export class ScheduleCalendarComponent
     }
   }
 
-  // quando as ntradas do componente mudam, atualiza a tabela quando o monthSchedule muda
+  // quando as entradas do componente mudam, atualiza a tabela quando o monthSchedule muda
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['monthSchedule'] && this.monthSchedule) {
       this.buildTable()

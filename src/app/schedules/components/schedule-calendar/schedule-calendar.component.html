@@ -1,45 +1,18 @@
 <div class="container">
   <div class="row">
-    <div class="col-12">
-      <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="container">
-        <div class="row">
-          <div class="col-4">
-            <mat-form-field>
-              <mat-label>Inicio</mat-label>
-              <input
-                matInput
-                [matTimepicker]="startAtPicker"
-                [ngModelOptions]="{ updateOn: 'blur' }"
-                name="startAt"
-                id="startAt"
-                #startAtModel="ngModel"
-                (ngModelChange)="onTimeChange($event)"
-                [(ngModel)]="newSchedule.startAt"
-                required
-              />
-              <mat-timepicker #startAtPicker />
-              <mat-timepicker-toggle [for]="startAtPicker" matSuffix />
-            </mat-form-field>
-          </div>
-          <div class="col-4">
-            <mat-form-field>
-              <mat-label>Término</mat-label>
-              <input
-                matInput
-                [matTimepicker]="endAtPicker"
-                [ngModelOptions]="{ updateOn: 'blur' }"
-                name="endAt"
-                id="endAt"
-                #endAtModel="ngModel"
-                [(ngModel)]="newSchedule.endAt"
-                disabled="true"
-              />
-              <mat-timepicker #endAtPicker />
-              <mat-timepicker-toggle [for]="endAtPicker" matSuffix />
-            </mat-form-field>
-          </div>
-          <div class="col-3">
-            <mat-form-field>
+    <div class="col-6">
+      <mat-card class="calendar-card">
+        <mat-calendar [(selected)]="selected"></mat-calendar>
+      </mat-card>
+    </div>
+
+    <div class="col-6">
+      <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="container h-100">
+        <div
+          class="d-flex flex-column align-items-start justify-content-between py-5 h-100"
+        >
+          <div class="col-12">
+            <mat-form-field class="w-100">
               <mat-label>Selecione o client</mat-label>
               <mat-select
                 name="clientId"
@@ -54,28 +27,63 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="col-1">
+
+          <div class="col-12">
+            <mat-form-field class="w-100">
+              <mat-label>Inicio</mat-label>
+              <input
+                matInput
+                [matTimepicker]="startAtPicker"
+                [ngModelOptions]="{ updateOn: 'blur' }"
+                name="startAt"
+                id="startAt"
+                #startAtModel="ngModel"
+                [(ngModel)]="newSchedule.startAt"
+                required
+              />
+              <!-- (ngModelChange)="onTimeChange($event)" -->
+              <mat-timepicker #startAtPicker />
+              <mat-timepicker-toggle [for]="startAtPicker" matSuffix />
+            </mat-form-field>
+          </div>
+
+          <div class="col-12">
+            <mat-form-field class="w-100">
+              <mat-label>Término</mat-label>
+              <input
+                matInput
+                [matTimepicker]="endAtPicker"
+                [ngModelOptions]="{ updateOn: 'blur' }"
+                name="endAt"
+                id="endAt"
+                #endAtModel="ngModel"
+                [(ngModel)]="newSchedule.endAt"
+                required
+              />
+              <mat-timepicker #endAtPicker />
+              <mat-timepicker-toggle [for]="endAtPicker" matSuffix />
+            </mat-form-field>
+          </div>
+
+          <div class="col-12 div-button">
             <button
+              class="w-100"
               type="submit"
               mat-mini-fab
               extended
               matTooltip="incluir agendamento no dia"
               [disabled]="form.invalid"
             >
-              <mat-icon>add</mat-icon>
+              Agendar
             </button>
           </div>
         </div>
       </form>
     </div>
   </div>
+
   <div class="row">
-    <div class="col-6">
-      <mat-card class="calendar-card">
-        <mat-calendar [(selected)]="selected"></mat-calendar>
-      </mat-card>
-    </div>
-    <div class="col-6">
+    <div class="col-12 gy-5">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <ng-container matColumnDef="startAt">
           <th mat-header-cell *matHeaderCellDef>Inicio</th>
@@ -83,16 +91,19 @@
             {{ schedule.startAt | date : "HH:mm a" }}
           </td>
         </ng-container>
+
         <ng-container matColumnDef="endAt">
           <th mat-header-cell *matHeaderCellDef>Termino</th>
           <td mat-cell *matCellDef="let schedule">
             {{ schedule.endAt | date : "HH:mm a" }}
           </td>
         </ng-container>
+
         <ng-container matColumnDef="client">
           <th mat-header-cell *matHeaderCellDef>Cliente</th>
           <td mat-cell *matCellDef="let schedule">{{ schedule.clientName }}</td>
         </ng-container>
+
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Ações</th>
           <td mat-cell *matCellDef="let schedule">
@@ -106,9 +117,11 @@
             </button>
           </td>
         </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
+
       <mat-paginator
         [pageSizeOptions]="[3, 6, 9]"
         showFirstLastButton

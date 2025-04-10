@@ -3,6 +3,7 @@ import { EditClientComponent } from './clients/edit-client/edit-client.component
 import { NewClientComponent } from './clients/new-client/new-client.component';
 import { ListClientsComponent } from './clients/list-clients/list-clients.component';
 import { SchedulesMonthComponent } from './schedules/schedules-month/schedules-month.component';
+import { SchedulesListComponent } from './schedules/schedules-list/schedules-list.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,11 @@ export const routes: Routes = [
     path: 'schedule/month',
     component: SchedulesMonthComponent,
     data: { title: 'Agendamentos' },
+  },
+  {
+    path: 'schedule/list',
+    component: SchedulesListComponent,
+    data: { title: 'Agendamentos do mês' },
   },
   { path: '**', redirectTo: 'schedule/month' },
 ];

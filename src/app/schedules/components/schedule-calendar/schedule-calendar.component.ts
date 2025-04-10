@@ -55,148 +55,174 @@ import { provideNativeDateAdapter } from '@angular/material/core';
     MatInputModule,
   ],
   providers: [
+    // adaptador nativo de data
     provideNativeDateAdapter(),
+    // deinição do provedor de dependencia usando o SERVICES_TOKEN
     { provide: SERVICES_TOKEN.DIALOG, useClass: DialogManagerService },
   ],
   templateUrl: './schedule-calendar.component.html',
   styleUrl: './schedule-calendar.component.scss',
 })
+
+/* componente que exibe um calendario de agendamentos,
+permitindo criar e excluir agendamentos com angular material para interface
+e serviços de dialogos para confirmação de exclusão */
 export class ScheduleCalendarComponent
   implements AfterViewInit, OnChanges, OnDestroy {
-  private subscription?: Subscription;
+  // Armazena a inscrição em Observable do diálogo de confirmação.
+  private subscription?: Subscription
 
-  private _selected: Date = new Date();
+  // data selecionada no calendario
+  private _selected: Date = new Date()
 
-  displayedColumns: string[] = ['startAt', 'endAt', 'client', 'actions'];
+  // definiççao das colunas na tabela de agendamentos
+  displayedColumns: string[] = ['startAt', 'endAt', 'client', 'actions']
 
-  dataSource!: MatTableDataSource<ClientScheduleAppointmentModel>;
+  // dados da tabela de agendamentos
+  dataSource!: MatTableDataSource<ClientScheduleAppointmentModel>
 
-  addingSchedule: boolean = false;
+  // se o formulario de agendamento está ativo
+  addingSchedule: boolean = false
 
+  // dados do novo agendamento
   newSchedule: SaveScheduleModel = {
     startAt: undefined,
     endAt: undefined,
     clientId: undefined,
-  };
+  }
 
-  clientSelectFormControl = new FormControl();
+  // controle do formulario de seleção do cliente
+  clientSelectFormControl = new FormControl()
 
-  @Input() monthSchedule!: ScheduleAppointmentMonthModel;
-  @Input() clients: SelectClientModel[] = [];
+  @Input() // entrada dos dados de agendamento do mês
+  monthSchedule!: ScheduleAppointmentMonthModel
 
-  @Output() onDateChange = new EventEmitter<Date>();
-  @Output() onConfirmDelete =
-    new EventEmitter<ClientScheduleAppointmentModel>();
-  @Output() onScheduleClient = new EventEmitter<SaveScheduleModel>();
+  @Input() // entrada da lista de clientes
+  clients: SelectClientModel[] = []
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @Output() // emite a data quando muda
+  onDateChange = new EventEmitter<Date>()
 
+  @Output() // emite a confirmação da exclusão
+  onConfirmDelete = new EventEmitter<ClientScheduleAppointmentModel>()
+
+  @Output() // emite o agendamento a ser salvo
+  onScheduleClient = new EventEmitter<SaveScheduleModel>()
+
+  @ViewChild(MatPaginator) // referência do paginator
+  paginator!: MatPaginator
+
+  // injeção dos servições usando os tokens de injeção de dependencias
   constructor(
-    @Inject(SERVICES_TOKEN.DIALOG)
-    private readonly dialogManagerService: IDialogManagerService
+    @Inject(SERVICES_TOKEN.DIALOG) private readonly dialogManagerService: IDialogManagerService
   ) { }
 
+  // retorna a data selecionada
   get selected(): Date {
-    return this._selected;
+    return this._selected
   }
 
+  // define a nova data, emite o evento "onTimeChange" e atualiza a tabela
   set selected(selected: Date) {
     if (this._selected.getTime() !== selected.getTime()) {
-      this.onDateChange.emit(selected);
-      this.buildTable();
-      this._selected = selected;
+      this.onDateChange.emit(selected)
+      this.buildTable()
+      this._selected = selected
     }
   }
 
+  /* quando o componente é destruído,
+  cancela todas as incrições para evitar vazamento de memoria */
   ngOnDestroy(): void {
     if (this.subscription) {
-      this.subscription.unsubscribe();
+      this.subscription.unsubscribe()
     }
   }
 
+  /* após a inicialização da visualização do componente,
+  define o paginador da tabela */
   ngAfterViewInit(): void {
     if (this.dataSource && this.paginator) {
-      this.dataSource.paginator = this.paginator;
-    }
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['monthSchedule'] && this.monthSchedule) {
-      this.buildTable();
+      this.dataSource.paginator = this.paginator
     }
   }
 
+  // quando as entradas do componente mudam, atualiza a tabela quando o monthSchedule muda
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['monthSchedule'] && this.monthSchedule) {
+      this.buildTable()
+    }
+  }
+
+  /* quando o formulario para o agendamento for enviado,
+  cria um objeto ClientScheduleAppointmentModel com os dados, adiciona á lista dos agendamentos,
+  emite o evento onScheduleClient, atualiza a tabela e limpa o formulário */
   onSubmit(form: NgForm) {
-    const startAt = new Date(this._selected);
-    const endAt = new Date(this._selected);
+    const startAt = new Date(this._selected)
+    const endAt = new Date(this._selected)
     startAt.setHours(
       this.newSchedule.startAt!.getHours(),
       this.newSchedule.startAt!.getMinutes()
-    );
+    )
     endAt.setHours(
       this.newSchedule.endAt!.getHours(),
       this.newSchedule.endAt!.getMinutes()
-    );
+    )
     const saved: ClientScheduleAppointmentModel = {
       id: -1,
       day: this._selected.getDate(),
       startAt,
       endAt,
       clientId: this.newSchedule.clientId!,
-      clientName: this.clients.find((c) => c.id === this.newSchedule.clientId!)!
-        .name,
-    };
-    this.monthSchedule.scheduledAppointments.push(saved);
-    this.onScheduleClient.emit(saved);
-    this.buildTable();
-    form.resetForm();
+      clientName: this.clients.find(c => c.id === this.newSchedule.clientId!)!.name,
+    }
+    this.monthSchedule.scheduledAppointments.push(saved)
+    this.onScheduleClient.emit(saved)
+    this.buildTable()
+    form.resetForm()
     this.newSchedule = {
       startAt: undefined,
       endAt: undefined,
       clientId: undefined,
-    };
+    }
   }
 
+  /* qundo a solicitação de exclusão for enviada, exibe um dialogo de confirmação com dialogManagerService.
+  Se confirmado, emite o evento onConfirmDelete e atualiza a tabela */
   requestDelete(schedule: ClientScheduleAppointmentModel) {
     this.subscription = this.dialogManagerService
       .showYesNoDialog(YesNoDialogComponent, {
         title: 'Exclusão de agendamento',
         content: 'Confirma a exclusão do agendamento?',
-      })
-      .subscribe((result) => {
+      }).subscribe(result => {
         if (result) {
-          this.onConfirmDelete.emit(schedule);
-          const updatedeList = this.dataSource.data.filter(
-            (c) => c.id !== schedule.id
-          );
-          this.dataSource =
-            new MatTableDataSource<ClientScheduleAppointmentModel>(
-              updatedeList
-            );
+          this.onConfirmDelete.emit(schedule)
+          const updatedeList = this.dataSource.data.filter(c => c.id !== schedule.id)
+          this.dataSource = new MatTableDataSource<ClientScheduleAppointmentModel>(updatedeList)
           if (this.paginator) {
             this.dataSource.paginator = this.paginator;
           }
         }
-      });
+      })
   }
 
-  onTimeChange(time: Date) {
-    const endAt = new Date(time);
-    endAt.setHours(time.getHours() + 1);
-    this.newSchedule.endAt = endAt;
-  }
+  /* quando for escolhido o tempo de inicio, define o tempo de termino uma (1) hora depois */
+  // onTimeChange(time: Date) {
+  //   const endAt = new Date(time)
+  //   endAt.setHours(time?.getHours() + 1)
+  //   this.newSchedule.endAt = endAt
+  // }
 
+  // filtra os agendamentos pelo dia criando um novo matTableDataSource com esses dados, atualizando o paginator
   private buildTable() {
-    const appointments = this.monthSchedule.scheduledAppointments.filter(
-      (a) =>
-        this.monthSchedule.year === this._selected.getFullYear() &&
-        this.monthSchedule.month - 1 === this._selected.getMonth() &&
-        a.day === this._selected.getDate()
-    );
-    this.dataSource = new MatTableDataSource<ClientScheduleAppointmentModel>(
-      appointments
-    );
+    const appointments = this.monthSchedule.scheduledAppointments.filter(a =>
+      this.monthSchedule.year === this._selected.getFullYear() &&
+      this.monthSchedule.month - 1 === this._selected.getMonth() &&
+      a.day === this._selected.getDate()
+    )
+    this.dataSource = new MatTableDataSource<ClientScheduleAppointmentModel>(appointments)
     if (this.paginator) {
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.paginator
     }
   }
 }

@@ -15,31 +15,38 @@ import { SnackbarManagerService } from '../../services/snackbar-manager.service'
   templateUrl: './new-client.component.html',
   styleUrl: './new-client.component.scss',
   providers: [
+    // deinição dos provedores de dependencias usando o SERVICES_TOKEN
     { provide: SERVICES_TOKEN.HTTP.CLIENT, useClass: ClientsService },
     { provide: SERVICES_TOKEN.SNACKBAR, useClass: SnackbarManagerService },
   ],
 })
+// componente de formulario para cadastrar um novo cliente usando um serviço HTTP
 export class NewClientComponent implements OnDestroy {
+  // armazenamento da inscrição
   private httpSubscription?: Subscription;
 
+  // injeção dos servições usando os tokens de injeção de dependencias
   constructor(
-    @Inject(SERVICES_TOKEN.HTTP.CLIENT)
-    private readonly httpService: ICLientService,
-    @Inject(SERVICES_TOKEN.SNACKBAR)
-    private readonly snackBarManager: ISnackbarManagerService,
+    @Inject(SERVICES_TOKEN.HTTP.CLIENT) private readonly httpService: ICLientService,
+    @Inject(SERVICES_TOKEN.SNACKBAR) private readonly snackBarManager: ISnackbarManagerService,
     private readonly router: Router
-  ) {}
+  ) { }
+
+  // quando destruido cancela a inscrição
   ngOnDestroy(): void {
     if (this.httpSubscription) {
-      this.httpSubscription.unsubscribe();
+      this.httpSubscription.unsubscribe()
     }
   }
 
+  /* extrai os dados do cliente, envia para o servidor com o this.httpService.save e exibe um snackbar de sucesso
+  após isso navega para a listagem de clientes */
   onSubmitClient(value: ClientModelForm) {
-    const { id, ...request } = value;
-    this.httpSubscription = this.httpService.save(request).subscribe((_) => {
-      this.snackBarManager.show('Usuário cadastrado com sucesso');
-      this.router.navigate(['client/list']);
-    });
+    const { id, ...request } = value
+    this.httpSubscription = this.httpService.save(request)
+      .subscribe(_ => {
+        this.snackBarManager.show('Usuário cadastrado com sucesso')
+        this.router.navigate(['client/list'])
+      })
   }
 }

@@ -1,8 +1,8 @@
-import { InjectionToken } from '@angular/core';
 import { ICLientService } from './api-client/clients/iclients.service';
 import { ISnackbarManagerService } from './isnackbar-manager.service';
 import { IDialogManagerService } from './idialog-manager.service';
 import { ISchdeuleService } from './api-client/schedules/ischedule.service';
+import { InjectionToken } from '@angular/core';
 
 /* objeto SERVICES_TOKEN que contem InjectionsTokens para os serviços da aplicação.
 InjectionTokens são usados no Angular para fornecer dependências de forma mais flexível e segura,
